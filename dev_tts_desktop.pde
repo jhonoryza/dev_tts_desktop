@@ -1,17 +1,67 @@
 import g4p_controls.*;
-
 import java.net.*;
 import java.io.*;
-
+import java.awt.Font;
+import com.dhchoi.CountdownTimer;
+import com.dhchoi.CountdownTimerService;
+CountdownTimer timer;
+String pathFile;
+int position = 0;
 public void setup() 
 {
-  String textVoice = "selamat datang di kota bandung provinsi jawa barat";
-  textVoice = textVoice.replace(" ", "%20");
-  String u= "http://code.responsivevoice.org/getvoice.php?t=" +textVoice +"&tl=id&sv=&vn=&pitch=0.45&rate=0.5&vol=1";
-  // saveToFile(u);
+  smooth();
+  size(900, 500, JAVA2D);
+  createGUI();
+  customGUI();
 }
-public void saveToFile(String u) {
-  
+public void draw() {
+  background(240);
+  //translate(0, position);
+  panel2.moveTo(0,slider2.getValueF()); 
+}
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  if (e >0) {
+    position += 3;
+  } else if (e <0) {
+    position -= 3;
+  }
+  println(e);
+}
+public void customGUI() {
+  Font fontHeader = new Font("droid", Font.PLAIN, 16);
+  //Font fontLabel = new Font("droid", Font.PLAIN, 16);
+  labelTitle.setFont(fontHeader);
+  //labelTts.setFont(fontLabel);
+}
+public void playVoice() {
+  String filename = inputSpeech.getText();
+  String textVoice = filename.replace(" ", "%20");
+  String u= "http://code.responsivevoice.org/getvoice.php?t=" +textVoice +"&tl=id&sv=&vn=&pitch=0.45&rate=0.5&vol=1";
+  if (pathFile != null)
+    saveToFile(u, filename);
+  else {
+    labelErrorMsg.setText("please select a directory to put mp3 files");
+    timer = CountdownTimerService.getNewCountdownTimer(this).configure(1000, 5000).start();
+  }
+}
+public void selectFolder() {
+  String name = G4P.selectFolder("Folder Dialog");
+  if (name != null) {
+    labelDirPath.setText(name);
+    pathFile = name;
+  }
+  //selectFolder("Select a folder to process:", "folderSelected");
+}
+void folderSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    labelDirPath.setText(selection.getAbsolutePath());
+    println("User selected " + selection.getAbsolutePath());
+  }
+}
+public void saveToFile(String u, String filename) {
   try {
     URL url = new URL(u);
     try {
@@ -21,7 +71,7 @@ public void saveToFile(String u) {
       connection.connect();
       InputStream is = connection.getInputStream();
       // create a file named after the text
-      File f = new File("/tmp/mee.mp3");
+      File f = new File(pathFile +"/" +filename +".mp3");
       OutputStream out = new FileOutputStream(f);
       byte buf[] = new byte[1024];
       int len;
@@ -31,13 +81,23 @@ public void saveToFile(String u) {
       }
       out.close();
       is.close();
-      println("File created for: mee.mp3"); // report back via the console
+      println(" File " +filename +".mp3 created "); // report back via the console
     } 
     catch (IOException e) {
       e.printStackTrace();
+      labelErrorMsg.setText("network connection error");
+      timer = CountdownTimerService.getNewCountdownTimer(this).configure(1000, 30000).start();
     }
   } 
   catch (MalformedURLException e) {
     e.printStackTrace();
   }
+}
+void onTickEvent(CountdownTimer t, long timeLeftUntilFinish) {
+  println( "[tick] - timeLeft: " + timeLeftUntilFinish + "ms");
+}
+
+void onFinishEvent(CountdownTimer t) {
+  println( "[finished]");
+  labelErrorMsg.setText("");
 }

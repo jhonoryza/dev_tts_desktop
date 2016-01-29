@@ -14,6 +14,64 @@
  * =========================================================
  */
 
+public void inputSpeech_change(GTextField source, GEvent event) { //_CODE_:inputSpeech:624486:
+  println("inputSpeech - GTextField >> GEvent." + event + " @ " + millis());
+} //_CODE_:inputSpeech:624486:
+
+public void buttonPlay_click(GButton source, GEvent event) { //_CODE_:buttonPlay:757449:
+  println("buttonPlay - GButton >> GEvent." + event + " @ " + millis());
+  playVoice();
+} //_CODE_:buttonPlay:757449:
+
+public void inputKorNum_change(GTextField source, GEvent event) { //_CODE_:inputKorNum:981815:
+  println("inputKorNum - GTextField >> GEvent." + event + " @ " + millis());
+} //_CODE_:inputKorNum:981815:
+
+public void buttonCreate_click(GButton source, GEvent event) { //_CODE_:buttonCreate:884548:
+  println("buttonCreate - GButton >> GEvent." + event + " @ " + millis());
+} //_CODE_:buttonCreate:884548:
+
+public void buttonDir_click(GButton source, GEvent event) { //_CODE_:buttonDir:751435:
+  println("buttonDir - GButton >> GEvent." + event + " @ " + millis());
+  selectFolder();
+} //_CODE_:buttonDir:751435:
+
+public void inputPitch_change(GTextField source, GEvent event) { //_CODE_:inputPitch:683113:
+  println("inputPitch - GTextField >> GEvent." + event + " @ " + millis());
+} //_CODE_:inputPitch:683113:
+
+public void inputRate_change(GTextField source, GEvent event) { //_CODE_:inputRate:979273:
+  println("inputRate - GTextField >> GEvent." + event + " @ " + millis());
+} //_CODE_:inputRate:979273:
+
+public void inputVolume_change(GTextField source, GEvent event) { //_CODE_:inputVolume:633250:
+  println("inputVolume - GTextField >> GEvent." + event + " @ " + millis());
+} //_CODE_:inputVolume:633250:
+
+public void panel1_Click1(GPanel source, GEvent event) { //_CODE_:panel1:219920:
+  println("panel1 - GPanel >> GEvent." + event + " @ " + millis());
+} //_CODE_:panel1:219920:
+
+public void slider1_change1(GSlider source, GEvent event) { //_CODE_:slider1:896772:
+  println("slider1 - GSlider >> GEvent." + event + " @ " + millis());
+} //_CODE_:slider1:896772:
+
+synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:window1:533331:
+  appc.background(230);
+} //_CODE_:window1:533331:
+
+public void button1_click1(GButton source, GEvent event) { //_CODE_:button1:817382:
+  println("button1 - GButton >> GEvent." + event + " @ " + millis());
+} //_CODE_:button1:817382:
+
+public void slider2_change1(GSlider source, GEvent event) { //_CODE_:slider2:940205:
+  println("slider2 - GSlider >> GEvent." + event + " @ " + millis());
+} //_CODE_:slider2:940205:
+
+public void panel2_Click1(GPanel source, GEvent event) { //_CODE_:panel2:774575:
+  println("panel2 - GPanel >> GEvent." + event + " @ " + millis());
+} //_CODE_:panel2:774575:
+
 
 
 // Create all the GUI controls. 
@@ -23,7 +81,142 @@ public void createGUI(){
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setCursor(ARROW);
   surface.setTitle("Sketch Window");
+  labelTitle = new GLabel(this, 10, 10, 100, 20);
+  labelTitle.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  labelTitle.setText("config apps");
+  labelTitle.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  labelTitle.setOpaque(false);
+  labelTts = new GLabel(this, 10, 40, 80, 20);
+  labelTts.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  labelTts.setText("input text");
+  labelTts.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  labelTts.setOpaque(false);
+  inputSpeech = new GTextField(this, 130, 40, 160, 20, G4P.SCROLLBARS_NONE);
+  inputSpeech.setPromptText("input text here");
+  inputSpeech.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  inputSpeech.setOpaque(true);
+  inputSpeech.addEventHandler(this, "inputSpeech_change");
+  buttonPlay = new GButton(this, 310, 40, 90, 20);
+  buttonPlay.setText("play");
+  buttonPlay.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  buttonPlay.addEventHandler(this, "buttonPlay_click");
+  labelKorNum = new GLabel(this, 10, 100, 110, 20);
+  labelKorNum.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  labelKorNum.setText("input jumlah koridor");
+  labelKorNum.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  labelKorNum.setOpaque(false);
+  inputKorNum = new GTextField(this, 130, 100, 160, 20, G4P.SCROLLBARS_NONE);
+  inputKorNum.setPromptText("input number here");
+  inputKorNum.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  inputKorNum.setOpaque(true);
+  inputKorNum.addEventHandler(this, "inputKorNum_change");
+  buttonCreate = new GButton(this, 310, 100, 90, 20);
+  buttonCreate.setText("create");
+  buttonCreate.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  buttonCreate.addEventHandler(this, "buttonCreate_click");
+  labelDir = new GLabel(this, 10, 70, 110, 20);
+  labelDir.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  labelDir.setText("save file mp3 to");
+  labelDir.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  labelDir.setOpaque(false);
+  buttonDir = new GButton(this, 310, 70, 90, 20);
+  buttonDir.setText("select directory");
+  buttonDir.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  buttonDir.addEventHandler(this, "buttonDir_click");
+  labelDirPath = new GLabel(this, 410, 70, 480, 50);
+  labelDirPath.setTextAlign(GAlign.LEFT, GAlign.TOP);
+  labelDirPath.setText("not selected");
+  labelDirPath.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  labelDirPath.setOpaque(false);
+  labelErrorMsg = new GLabel(this, 360, 10, 280, 20);
+  labelErrorMsg.setLocalColorScheme(GCScheme.RED_SCHEME);
+  labelErrorMsg.setOpaque(false);
+  labelPitch = new GLabel(this, 410, 40, 80, 20);
+  labelPitch.setText("pitch");
+  labelPitch.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  labelPitch.setOpaque(false);
+  inputPitch = new GTextField(this, 480, 40, 60, 20, G4P.SCROLLBARS_NONE);
+  inputPitch.setText("0.5");
+  inputPitch.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  inputPitch.setOpaque(true);
+  inputPitch.addEventHandler(this, "inputPitch_change");
+  labelRate = new GLabel(this, 540, 40, 80, 20);
+  labelRate.setText("rate");
+  labelRate.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  labelRate.setOpaque(false);
+  inputRate = new GTextField(this, 620, 40, 60, 20, G4P.SCROLLBARS_NONE);
+  inputRate.setText("0.5");
+  inputRate.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  inputRate.setOpaque(true);
+  inputRate.addEventHandler(this, "inputRate_change");
+  labelVolume = new GLabel(this, 680, 40, 80, 20);
+  labelVolume.setText("volume");
+  labelVolume.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  labelVolume.setOpaque(false);
+  inputVolume = new GTextField(this, 760, 40, 60, 20, G4P.SCROLLBARS_NONE);
+  inputVolume.setText("1");
+  inputVolume.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
+  inputVolume.setOpaque(true);
+  inputVolume.addEventHandler(this, "inputVolume_change");
+  panel1 = new GPanel(this, 120, 150, 300, 300, "Tab bar text");
+  panel1.setText("Tab bar text");
+  panel1.setOpaque(true);
+  panel1.addEventHandler(this, "panel1_Click1");
+  slider1 = new GSlider(this, 670, 30, 270, 70, 10.0);
+  slider1.setShowValue(true);
+  slider1.setShowLimits(true);
+  slider1.setRotation(PI/2, GControlMode.CORNER);
+  slider1.setLimits(0.5, 0.0, 1.0);
+  slider1.setShowTicks(true);
+  slider1.setNumberFormat(G4P.DECIMAL, 2);
+  slider1.setOpaque(false);
+  slider1.addEventHandler(this, "slider1_change1");
+  panel1.addControl(slider1);
+  window1 = GWindow.getWindow(this, "Window title", 0, 0, 800, 400, JAVA2D);
+  window1.noLoop();
+  window1.addDrawHandler(this, "win_draw1");
+  button1 = new GButton(window1, 110, 130, 100, 20);
+  button1.setText("Face text");
+  button1.addEventHandler(this, "button1_click1");
+  slider2 = new GSlider(window1, 780, 110, 220, 100, 10.0);
+  slider2.setShowValue(true);
+  slider2.setShowLimits(true);
+  slider2.setRotation(PI/2, GControlMode.CORNER);
+  slider2.setLimits(0.5, 0.0, 400.0);
+  slider2.setStickToTicks(true);
+  slider2.setShowTicks(true);
+  slider2.setNumberFormat(G4P.DECIMAL, 2);
+  slider2.setOpaque(false);
+  slider2.addEventHandler(this, "slider2_change1");
+  panel2 = new GPanel(window1, 370, 80, 270, 280, "Tab bar text");
+  panel2.setText("Tab bar text");
+  panel2.setOpaque(true);
+  panel2.addEventHandler(this, "panel2_Click1");
+  window1.loop();
 }
 
 // Variable declarations 
 // autogenerated do not edit
+GLabel labelTitle; 
+GLabel labelTts; 
+GTextField inputSpeech; 
+GButton buttonPlay; 
+GLabel labelKorNum; 
+GTextField inputKorNum; 
+GButton buttonCreate; 
+GLabel labelDir; 
+GButton buttonDir; 
+GLabel labelDirPath; 
+GLabel labelErrorMsg; 
+GLabel labelPitch; 
+GTextField inputPitch; 
+GLabel labelRate; 
+GTextField inputRate; 
+GLabel labelVolume; 
+GTextField inputVolume; 
+GPanel panel1; 
+GSlider slider1; 
+GWindow window1;
+GButton button1; 
+GSlider slider2; 
+GPanel panel2; 
