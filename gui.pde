@@ -16,6 +16,7 @@
 
 public void inputSpeech_change(GTextField source, GEvent event) { //_CODE_:inputSpeech:624486:
   println("inputSpeech - GTextField >> GEvent." + event + " @ " + millis());
+  inputChange = true;
 } //_CODE_:inputSpeech:624486:
 
 public void buttonPlay_click(GButton source, GEvent event) { //_CODE_:buttonPlay:757449:
@@ -39,14 +40,17 @@ public void buttonDir_click(GButton source, GEvent event) { //_CODE_:buttonDir:7
 
 public void inputPitch_change(GTextField source, GEvent event) { //_CODE_:inputPitch:683113:
   println("inputPitch - GTextField >> GEvent." + event + " @ " + millis());
+  inputChange = true;
 } //_CODE_:inputPitch:683113:
 
 public void inputRate_change(GTextField source, GEvent event) { //_CODE_:inputRate:979273:
   println("inputRate - GTextField >> GEvent." + event + " @ " + millis());
+  inputChange = true;
 } //_CODE_:inputRate:979273:
 
 public void inputVolume_change(GTextField source, GEvent event) { //_CODE_:inputVolume:633250:
   println("inputVolume - GTextField >> GEvent." + event + " @ " + millis());
+  inputChange = true;
 } //_CODE_:inputVolume:633250:
 
 
@@ -62,57 +66,53 @@ public void createGUI(){
   labelTitle.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
   labelTitle.setText("config apps");
   labelTitle.setOpaque(false);
-  labelTts = new GLabel(this, 10, 40, 80, 20);
+  labelTts = new GLabel(this, 10, 40, 120, 20);
   labelTts.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
-  labelTts.setText("input text");
+  labelTts.setText("input text to speech:");
   labelTts.setOpaque(false);
-  inputSpeech = new GTextField(this, 130, 40, 160, 20, G4P.SCROLLBARS_NONE);
+  inputSpeech = new GTextField(this, 140, 40, 160, 20, G4P.SCROLLBARS_NONE);
   inputSpeech.setPromptText("input text here");
   inputSpeech.setOpaque(true);
   inputSpeech.addEventHandler(this, "inputSpeech_change");
-  buttonPlay = new GButton(this, 310, 40, 90, 20);
-  buttonPlay.setText("play");
+  buttonPlay = new GButton(this, 310, 40, 90, 40);
+  buttonPlay.setText("save to mp3         & play");
   buttonPlay.addEventHandler(this, "buttonPlay_click");
-  labelKorNum = new GLabel(this, 10, 100, 110, 20);
+  labelKorNum = new GLabel(this, 10, 120, 120, 20);
   labelKorNum.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
-  labelKorNum.setText("input jumlah koridor");
+  labelKorNum.setText("input jumlah koridor:");
   labelKorNum.setOpaque(false);
-  inputKorNum = new GTextField(this, 130, 100, 160, 20, G4P.SCROLLBARS_NONE);
+  inputKorNum = new GTextField(this, 140, 120, 160, 20, G4P.SCROLLBARS_NONE);
   inputKorNum.setPromptText("input number here");
   inputKorNum.setOpaque(true);
   inputKorNum.addEventHandler(this, "inputKorNum_change");
-  buttonCreate = new GButton(this, 310, 100, 90, 20);
+  buttonCreate = new GButton(this, 310, 120, 90, 20);
   buttonCreate.setText("create");
   buttonCreate.addEventHandler(this, "buttonCreate_click");
-  labelDir = new GLabel(this, 10, 70, 110, 20);
-  labelDir.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
-  labelDir.setText("save file mp3 to");
-  labelDir.setOpaque(false);
-  buttonDir = new GButton(this, 310, 70, 90, 20);
+  buttonDir = new GButton(this, 310, 90, 90, 20);
   buttonDir.setText("select directory");
   buttonDir.addEventHandler(this, "buttonDir_click");
-  labelDirPath = new GLabel(this, 410, 70, 390, 50);
+  labelDirPath = new GLabel(this, 410, 90, 380, 50);
   labelDirPath.setTextAlign(GAlign.LEFT, GAlign.TOP);
-  labelDirPath.setText("not selected");
+  labelDirPath.setText("save mp3 files to: not selected");
   labelDirPath.setOpaque(false);
   labelErrorMsg = new GLabel(this, 360, 10, 280, 20);
   labelErrorMsg.setLocalColorScheme(GCScheme.RED_SCHEME);
   labelErrorMsg.setOpaque(false);
-  labelPitch = new GLabel(this, 410, 40, 80, 20);
+  labelPitch = new GLabel(this, 420, 40, 60, 20);
   labelPitch.setText("pitch");
   labelPitch.setOpaque(false);
   inputPitch = new GTextField(this, 480, 40, 60, 20, G4P.SCROLLBARS_NONE);
   inputPitch.setText("0.5");
   inputPitch.setOpaque(true);
   inputPitch.addEventHandler(this, "inputPitch_change");
-  labelRate = new GLabel(this, 530, 40, 80, 20);
+  labelRate = new GLabel(this, 540, 40, 50, 20);
   labelRate.setText("rate");
   labelRate.setOpaque(false);
   inputRate = new GTextField(this, 590, 40, 60, 20, G4P.SCROLLBARS_NONE);
   inputRate.setText("0.5");
   inputRate.setOpaque(true);
   inputRate.addEventHandler(this, "inputRate_change");
-  labelVolume = new GLabel(this, 640, 40, 80, 20);
+  labelVolume = new GLabel(this, 650, 40, 60, 20);
   labelVolume.setText("volume");
   labelVolume.setOpaque(false);
   inputVolume = new GTextField(this, 710, 40, 60, 20, G4P.SCROLLBARS_NONE);
@@ -130,7 +130,6 @@ GButton buttonPlay;
 GLabel labelKorNum; 
 GTextField inputKorNum; 
 GButton buttonCreate; 
-GLabel labelDir; 
 GButton buttonDir; 
 GLabel labelDirPath; 
 GLabel labelErrorMsg; 
