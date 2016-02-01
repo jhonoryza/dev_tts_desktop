@@ -7,17 +7,21 @@ import com.dhchoi.CountdownTimerService;
 CountdownTimer timer;
 String pathFile;
 int position = 0;
+GWindow windowText;
+GPanel panel1;
+GSlider slider1;
+ 
 public void setup() 
 {
   smooth();
-  size(900, 500, JAVA2D);
+  size(800, 150, JAVA2D);
   createGUI();
   customGUI();
 }
 public void draw() {
   background(240);
-  //translate(0, position);
-  panel2.moveTo(0,slider2.getValueF()); 
+  if(windowText != null)
+  panel1.moveTo(0, slider1.getValueF());
 }
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
@@ -30,9 +34,49 @@ void mouseWheel(MouseEvent event) {
 }
 public void customGUI() {
   Font fontHeader = new Font("droid", Font.PLAIN, 16);
-  //Font fontLabel = new Font("droid", Font.PLAIN, 16);
   labelTitle.setFont(fontHeader);
-  //labelTts.setFont(fontLabel);
+  inputSpeech.setText("selamat datang");
+  inputKorNum.setText("1");
+}
+public void createTextCreatorWindow() {
+  if (inputKorNum.getText().matches("[0-9]+")) {
+    createPanel();
+  } else {
+    labelErrorMsg.setText("please input number of koridor");
+    timer = CountdownTimerService.getNewCountdownTimer(this).configure(1000, 5000).start();
+  }
+}
+synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:window1:723190:
+  appc.background(230); 
+  //println(data);
+  
+}
+public void createPanel() {
+  windowText = GWindow.getWindow(this, "Text Creator", 0, 0, 900, 500, JAVA2D);
+  windowText.noLoop();
+  windowText.setActionOnClose(G4P.CLOSE_WINDOW);
+  windowText.addDrawHandler(this, "win_draw1");
+  windowText.loop();
+
+  panel1 = new GPanel(windowText, 0, 0, 880, 500, "Tab all koridor");
+  panel1.setText("Tab bar text");
+  panel1.setOpaque(false);
+
+  slider1 = new GSlider(windowText, 900, 0, 500, 20, 10.0);
+  slider1.setRotation(PI/2, GControlMode.CORNER);
+  slider1.setLimits(0.0, 0.0, 500.0);
+  slider1.setNumberFormat(G4P.DECIMAL, 2);
+  slider1.setOpaque(false);
+
+  int totalKor = int(inputKorNum.getText());
+  GLabel[] labelKor = new GLabel[totalKor];
+  for (int i=0; i<totalKor; i++) {
+    labelKor[i] = new GLabel(windowText, 0, 10+(i*50), 390, 50);
+    labelKor[i].setTextAlign(GAlign.LEFT, GAlign.TOP);
+    labelKor[i].setText("Koridor " +(i+1));
+    labelKor[i].setOpaque(false);
+    panel1.addControl(labelKor[i]);
+  }
 }
 public void playVoice() {
   String filename = inputSpeech.getText();
