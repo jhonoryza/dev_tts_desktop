@@ -53,10 +53,11 @@ public void createTextCreatorWindow(int total) {
 
 GTextArea[] areaHalGo, areaHalBack;
 GLabel[] labelKor, labelHalGo, labelHalBack;
-GLabel labelMsg, labelErrorMsgText, labelMp3Msg, labelErrorMsgMp3;
+GLabel labelMsg, labelErrorMsgText, labelMp3Msg, labelErrorMsgMp3, labelPitch2, labelRate2, labelVol2;
 GWindow windowText;
 GPanel panel1;
 GSlider slider1;
+GTextField inputPitch2, inputRate2, inputVol2;
 int totalKor;
 public void createPanel(int total) {
   totalKor = total;
@@ -140,11 +141,12 @@ public void createPanel(int total) {
   labelErrorMsgMp3 = new GLabel(windowText, buttonSaveText.getWidth()+buttonSaveText.getX()+20, labelMsg.getHeight()+10+labelMsg.getY(), 400, 40);
   labelErrorMsgMp3.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
   labelErrorMsgMp3.setOpaque(false);
+  labelPitch2 = new GLabel(windowText, labelErrorMsgMp3.getX()+30, labelMsg.getHeight()+10+labelMsg.getY(), 100, 40);
+
   labelMp3Msg = new GLabel(windowText, 0, buttonSaveMp3Dir.getHeight()+buttonSaveMp3Dir.getY(), 500, 40);
   labelMp3Msg.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
   labelMp3Msg.setText("path: " +pathFileMp3);
   labelMp3Msg.setOpaque(false);
-
 
   panel1.addControl(buttonSaveMp3);
   panel1.addControl(buttonSaveMp3Dir);
