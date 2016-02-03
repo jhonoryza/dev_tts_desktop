@@ -8,7 +8,7 @@ import ddf.minim.*;
 //global variable
 AudioPlayer player;
 Minim minim;
-CountdownTimer timer, timerW2, timerW3;
+CountdownTimer timer, timerW2, timerW3, timerW4;
 String pathFile, pathFileText, pathFileMp3;
 int position = 0;
 public boolean inputChange = true;
@@ -53,7 +53,7 @@ public void createTextCreatorWindow(int total) {
 
 GTextArea[] areaHalGo, areaHalBack;
 GLabel[] labelKor, labelHalGo, labelHalBack;
-GLabel labelMsg, labelErrorMsgText, labelMp3Msg, labelErrorMsgMp3, labelPitch2, labelRate2, labelVol2;
+GLabel labelMsg, labelErrorMsgText, labelMp3Msg, labelErrorMsgMp3, labelPitch2, labelRate2, labelVol2, labelErrorMsgMp4;
 GWindow windowText;
 GPanel panel1;
 GSlider slider1;
@@ -141,17 +141,48 @@ public void createPanel(int total) {
   labelErrorMsgMp3 = new GLabel(windowText, buttonSaveText.getWidth()+buttonSaveText.getX()+20, labelMsg.getHeight()+10+labelMsg.getY(), 400, 40);
   labelErrorMsgMp3.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
   labelErrorMsgMp3.setOpaque(false);
-  labelPitch2 = new GLabel(windowText, labelErrorMsgMp3.getX()+30, labelMsg.getHeight()+10+labelMsg.getY(), 100, 40);
+  labelPitch2 = new GLabel(windowText, labelErrorMsgMp3.getX()+100, labelMsg.getHeight()+10+labelMsg.getY(), 100, 40);
+  labelPitch2.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  labelPitch2.setOpaque(false);
+  labelPitch2.setText("pitch (0 - 1)");
+  inputPitch2 = new GTextField(windowText, labelPitch2.getX()+80, labelMsg.getHeight()+20+labelMsg.getY(), 60, 20, G4P.SCROLLBARS_NONE);
+  inputPitch2.setText("0.5");
+  inputPitch2.setOpaque(true);
+  labelRate2 = new GLabel(windowText, inputPitch2.getX()+80, labelMsg.getHeight()+10+labelMsg.getY(), 100, 40);
+  labelRate2.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  labelRate2.setOpaque(false);
+  labelRate2.setText("rate (0 - 1)");
+  inputRate2 = new GTextField(windowText, labelRate2.getX()+80, labelMsg.getHeight()+20+labelMsg.getY(), 60, 20, G4P.SCROLLBARS_NONE);
+  inputRate2.setText("0.5");
+  inputRate2.setOpaque(true);
+  labelVol2 = new GLabel(windowText, inputRate2.getX()+80, labelMsg.getHeight()+10+labelMsg.getY(), 100, 40);
+  labelVol2.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
+  labelVol2.setOpaque(false);
+  labelVol2.setText("volume (0 - 1)");
+  inputVol2 = new GTextField(windowText, labelVol2.getX()+100, labelMsg.getHeight()+20+labelMsg.getY(), 60, 20, G4P.SCROLLBARS_NONE);
+  inputVol2.setText("0.5");
+  inputVol2.setOpaque(true);
 
   labelMp3Msg = new GLabel(windowText, 0, buttonSaveMp3Dir.getHeight()+buttonSaveMp3Dir.getY(), 500, 40);
   labelMp3Msg.setTextAlign(GAlign.LEFT, GAlign.MIDDLE);
   labelMp3Msg.setText("path: " +pathFileMp3);
   labelMp3Msg.setOpaque(false);
 
+  labelErrorMsgMp4 = new GLabel(windowText, 200, buttonSaveMp3Dir.getHeight()+buttonSaveMp3Dir.getY(), 500, 40);
+  labelErrorMsgMp4.setTextAlign(GAlign.MIDDLE, GAlign.MIDDLE);
+  labelErrorMsgMp4.setText("");
+  labelErrorMsgMp4.setOpaque(false);
+
   panel1.addControl(buttonSaveMp3);
   panel1.addControl(buttonSaveMp3Dir);
   panel1.addControl(labelMp3Msg);
   panel1.addControl(labelErrorMsgMp3);
+  panel1.addControl(labelPitch2);
+  panel1.addControl(inputPitch2);
+  panel1.addControl(labelRate2);
+  panel1.addControl(inputRate2);
+  panel1.addControl(labelVol2);
+  panel1.addControl(inputVol2);
 
   windowText.loop();
 }
@@ -187,8 +218,9 @@ public void playVoice() {
   String rate = inputRate.getText();
   String vol = inputVolume.getText();
   String u= "http://code.responsivevoice.org/getvoice.php?t=" 
-  +textVoice +"&tl=id&sv=&vn=&pitch=" +pitch +"&rate=" +rate +"&vol=" +vol;
-  if (pathFile != null) {
+    +textVoice +"&tl=id&sv=&vn=&pitch=" +pitch +"&rate=" +rate +"&vol=" +vol;
+  if (pathFile != null && !filename.isEmpty() && !pitch.isEmpty()
+    && !rate.isEmpty() && !vol.isEmpty()) {
     if (inputChange) {
       saveToFile(u, filename);
     } else if (!inputChange) {
@@ -231,6 +263,8 @@ public void saveToFile(String u, String filename) {
       is.close();
       inputChange = false;
       println(" File " +filename +".mp3 created "); // report back via the console
+      if (windowText != null)
+        labelErrorMsgMp4.setText(filename +" created");
       createTextMessage(" File " +filename +".mp3 created ", 5000);
       if (playfile)
         playFile(filename, pathFile);
@@ -279,16 +313,32 @@ public void createMp3Files() {
       trimList[j] = trim(list[j]);
       String filename = trimList[j];
       String textVoice = filename.replace(" ", "%20");
-      String u= "http://code.responsivevoice.org/getvoice.php?t=" +textVoice +"&tl=id&sv=&vn=&pitch=0.45&rate=0.5&vol=1"; 
+      String pitch = inputPitch2.getText();
+      String rate = inputRate2.getText();
+      String vol = inputVol2.getText();
+      String u= "http://code.responsivevoice.org/getvoice.php?t=" 
+        +textVoice +"&tl=id&sv=&vn=&pitch=" +pitch +"&rate=" +rate +"&vol=" +vol;
       saveToFile(u, filename);
     }
-    printArray(trimList);
+    //printArray(trimList);
   }
-  createTextMessageW3("mp3 created", 5000);
-  //String filename = inputSpeech.getText();
-  //String textVoice = filename.replace(" ", "%20");
-  //String u= "http://code.responsivevoice.org/getvoice.php?t=" +textVoice +"&tl=id&sv=&vn=&pitch=0.45&rate=0.5&vol=1"; 
-  //saveToFile(u, filename);
+  for (int i=0; i<totalKor; i++) {
+    String text =  areaHalBack[i].getText();
+    String[] list = splitTokens(text, ",");
+    String[] trimList = new String[list.length];
+    for (int j=0; j<list.length; j++) {
+      trimList[j] = trim(list[j]);
+      String filename = trimList[j];
+      String textVoice = filename.replace(" ", "%20");
+      String pitch = inputPitch2.getText();
+      String rate = inputRate2.getText();
+      String vol = inputVol2.getText();
+      String u= "http://code.responsivevoice.org/getvoice.php?t=" 
+        +textVoice +"&tl=id&sv=&vn=&pitch=" +pitch +"&rate=" +rate +"&vol=" +vol;
+      saveToFile(u, filename);
+    }
+    //printArray(trimList);
+  }
 }
 //Window Handlers
 synchronized public void win_draw1(PApplet appc, GWinData data) {
@@ -311,8 +361,10 @@ public void buttonSaveMp3_click(GButton source, GEvent event) {
       inputKosong = true;
     }
   }
-  if (pathFileMp3 != null && !inputKosong) {
+  if (pathFileMp3 != null && !inputKosong && !inputPitch2.getText().isEmpty()
+    && !inputRate2.getText().isEmpty() && !inputVol2.getText().isEmpty()) {
     createMp3Files();
+    createTextMessageW3("mp3 created", 30000);
   } else {
     createTextMessageW3("mp3 not created", 5000);
   }
@@ -374,5 +426,9 @@ public void createTextMessageW2(String msg, int wait) {
 }
 public void createTextMessageW3(String msg, int wait) {
   labelErrorMsgMp3.setText(msg);
+  timerW3 = CountdownTimerService.getNewCountdownTimer(this).configure(1000, wait).start();
+}
+public void createTextMessageW4(String msg, int wait) {
+  labelErrorMsgMp4.setText(msg);
   timerW3 = CountdownTimerService.getNewCountdownTimer(this).configure(1000, wait).start();
 }
