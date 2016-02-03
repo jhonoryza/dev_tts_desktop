@@ -16,7 +16,7 @@ public boolean playfile = false;
 public void setup() 
 {
   smooth();
-  size(800, 180, JAVA2D);
+  size(820, 180, JAVA2D);
   createGUI();
   customGUI();
 }
@@ -181,7 +181,11 @@ public void playVoice() {
   playfile = true;
   String filename = inputSpeech.getText();
   String textVoice = filename.replace(" ", "%20");
-  String u= "http://code.responsivevoice.org/getvoice.php?t=" +textVoice +"&tl=id&sv=&vn=&pitch=0.45&rate=0.5&vol=1";
+  String pitch = inputPitch.getText();
+  String rate = inputRate.getText();
+  String vol = inputVolume.getText();
+  String u= "http://code.responsivevoice.org/getvoice.php?t=" 
+  +textVoice +"&tl=id&sv=&vn=&pitch=" +pitch +"&rate=" +rate +"&vol=" +vol;
   if (pathFile != null) {
     if (inputChange) {
       saveToFile(u, filename);
@@ -209,13 +213,17 @@ public void saveToFile(String u, String filename) {
       connection.connect();
       InputStream is = connection.getInputStream();
       // create a file named after the text
-      File f = new File(pathFile +"/" +filename +".mp3");
+      File f;
+      if (windowText == null)
+        f = new File(pathFile +"/" +filename +".mp3");
+      else
+        f = new File(pathFileMp3 +"/" +filename +".mp3");
       OutputStream out = new FileOutputStream(f);
       byte buf[] = new byte[1024];
       int len;
       while ((len = is.read(buf)) > 0) {
         out.write(buf, 0, len);
-        print(buf);
+        //print(buf);
       }
       out.close();
       is.close();
@@ -263,12 +271,18 @@ public void createMp3Files() {
 
   for (int i=0; i<totalKor; i++) {
     String text =  areaHalGo[i].getText();
-    String[] list = split(text, ' ');
-    for (int j=0; j<list.length; j++)
-      list[j].trim();
-    println(list);
+    String[] list = splitTokens(text, ",");
+    String[] trimList = new String[list.length];
+    for (int j=0; j<list.length; j++) {
+      trimList[j] = trim(list[j]);
+      String filename = trimList[j];
+      String textVoice = filename.replace(" ", "%20");
+      String u= "http://code.responsivevoice.org/getvoice.php?t=" +textVoice +"&tl=id&sv=&vn=&pitch=0.45&rate=0.5&vol=1"; 
+      saveToFile(u, filename);
+    }
+    printArray(trimList);
   }
-
+  createTextMessageW3("mp3 created", 5000);
   //String filename = inputSpeech.getText();
   //String textVoice = filename.replace(" ", "%20");
   //String u= "http://code.responsivevoice.org/getvoice.php?t=" +textVoice +"&tl=id&sv=&vn=&pitch=0.45&rate=0.5&vol=1"; 
@@ -296,7 +310,6 @@ public void buttonSaveMp3_click(GButton source, GEvent event) {
     }
   }
   if (pathFileMp3 != null && !inputKosong) {
-    createTextMessageW3("mp3 created", 5000);
     createMp3Files();
   } else {
     createTextMessageW3("mp3 not created", 5000);
